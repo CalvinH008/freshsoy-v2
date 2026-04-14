@@ -8,7 +8,7 @@
 </head>
 <body>
     <h2>Sign In</h2>
-    <form action="{{route('showLogin')}}" method="POST">
+    <form action="{{route('login')}}" method="POST">
         @csrf
         <div>
             <label for="email">Email</label>
