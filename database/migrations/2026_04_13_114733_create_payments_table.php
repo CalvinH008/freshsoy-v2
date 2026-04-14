@@ -17,7 +17,7 @@ return new class extends Migration
             $table->enum('payment_method', ['cash', 'qris', 'transfer']);
             $table->bigInteger('amount');
             $table->enum('status', ['unpaid', 'paid', 'failed', 'refund']);
-            $table->date('paid_at')->nullable();
+            $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });
     }
