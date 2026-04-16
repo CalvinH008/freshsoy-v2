@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
+use App\Http\Controllers\Manager\DashboardController as ManagerDashboard;
+use App\Http\Controllers\Cashier\DashboardController as CashierDashboard;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,20 +16,14 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
-    Route::get('/dashboard', function () {
-        return 'admin dashboard';
-    })->name('dashboard');
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
 });
 
-Route::prefix('manager')->name('manager.')->middleware('role:manager')->group(function () {
-    Route::get('/dashboard', function () {
-        return 'manager dashboard';
-    })->name('dashboard');
+Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])->group(function () {
+   Route::get('/dashboard', [ManagerDashboard::class, 'index'])->name('dashboard');
 });
 
-Route::prefix('cashier')->name('cashier.')->middleware('role:cashier')->group(function () {
-    Route::get('/pos', function () {
-        return 'pos dashboard';
-    })->name('pos');
+Route::prefix('cashier')->name('cashier.')->middleware(['auth', 'role:cashier'])->group(function () {
+    Route::get('/pos', [CashierDashboard::class, 'index'])->name('pos');
 });
