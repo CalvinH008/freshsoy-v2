@@ -12,7 +12,7 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = ['admin', 'manajer', 'kasir'];
+        $roles = ['admin', 'manager', 'cashier'];
 
         foreach ($roles as $role) {
             \Spatie\Permission\Models\Role::create([
