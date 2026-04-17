@@ -47,7 +47,7 @@ class UserController extends Controller
                 $user->assignRole($request->validated('role'));
             });
 
-            return redirect()->route('admin.users.index')->with('success', 'User created successfully');
+            return redirect()->route('admin.user.index')->with('success', 'User created successfully');
         } catch (\Exception $error) {
             return redirect()->back()->withErrors(['error' => $error->getMessage()]);
         }
@@ -64,24 +64,43 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        return view('');
+        return view('admin.user.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, string $id)
-    {       
-        
-    }   
+    public function update(UpdateUserRequest $request, User $user)
+    {
+        try {
+            DB::transaction(function () use ($request, $user) {
+                $user->update([
+                    'name' => $request->validated('name'),
+                    'password' => $request->validated('password') ? Hash::make($request->validated('password')) : $user->password,
+                    'email' => $request->validated('email'),
+                    'outlet_id' => $request->validated('outlet_id') ?? null,
+                ]);
+                $user->syncRoles($request->validated('role'));
+            });
+
+            return redirect()->route('admin.user.index')->with('success', 'User updated successfully');
+        } catch (\Exception $error) {
+            return redirect()->back()->withErrors(['error' => $error->getMessage()]);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        try {
+            $user->delete();
+            return redirect()->route('admin.user.index')->with('success', 'User deleted successfully');
+        } catch (\Exception $error) {
+            return redirect()->back()->withErrors(['error' => $error->getMessage()]);
+        }
     }
 }
