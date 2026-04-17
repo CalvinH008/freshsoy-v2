@@ -10,8 +10,11 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function showLogin(): View
+    public function showLogin(): View|RedirectResponse
     {
+        if (Auth::check()) {
+            return $this->redirectByRole();
+        }
         return view('auth.login');
     }
 
@@ -22,7 +25,9 @@ class AuthController extends Controller
             'password' => ['required', 'string', 'min:8']
         ]);
 
-        if (Auth::attempt($credentials)) {
+        $remember = $request->boolean('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
             return $this->redirectByRole();
