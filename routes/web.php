@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Manager\DashboardController as ManagerDashboard;
 use App\Http\Controllers\Cashier\DashboardController as CashierDashboard;
 use App\Http\Controllers\Auth\AuthController;
@@ -18,6 +19,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
+    Route::resource('/users', UserController::class);
 });
 
 Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])->group(function () {

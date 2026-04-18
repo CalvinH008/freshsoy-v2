@@ -18,8 +18,8 @@ class UserController extends Controller
      */
     public function index(): View
     {
-        $user = User::with('roles')->paginate(10);
-        return view('admin.user.index', compact('user'));
+        $users = User::with('roles')->paginate(10);
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -27,7 +27,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.user.create');
+        return view('admin.users.create');
     }
 
     /**
@@ -47,7 +47,7 @@ class UserController extends Controller
                 $user->assignRole($request->validated('role'));
             });
 
-            return redirect()->route('admin.user.index')->with('success', 'User created successfully');
+            return redirect()->route('admin.users.index')->with('success', 'User created successfully');
         } catch (\Exception $error) {
             return redirect()->back()->withErrors(['error' => $error->getMessage()]);
         }
@@ -66,7 +66,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.user.edit', compact('user'));
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -85,7 +85,7 @@ class UserController extends Controller
                 $user->syncRoles($request->validated('role'));
             });
 
-            return redirect()->route('admin.user.index')->with('success', 'User updated successfully');
+            return redirect()->route('admin.users.index')->with('success', 'User updated successfully');
         } catch (\Exception $error) {
             return redirect()->back()->withErrors(['error' => $error->getMessage()]);
         }
@@ -98,7 +98,7 @@ class UserController extends Controller
     {
         try {
             $user->delete();
-            return redirect()->route('admin.user.index')->with('success', 'User deleted successfully');
+            return redirect()->route('admin.users.index')->with('success', 'User deleted successfully');
         } catch (\Exception $error) {
             return redirect()->back()->withErrors(['error' => $error->getMessage()]);
         }
