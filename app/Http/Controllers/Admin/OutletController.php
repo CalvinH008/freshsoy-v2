@@ -40,7 +40,7 @@ class OutletController extends Controller
                     'code' => $request->validated('code'),
                     'address' => $request->validated('address'),
                     'phone' => $request->validated('phone'),
-                    'is_active' => $request->validated('is_active')
+                    'is_active' => $request->validated('is_active') ?? true
                 ]);
             });
             return redirect()->route('admin.outlets.index')->with('success', 'Outlet created successfully');
@@ -77,7 +77,7 @@ class OutletController extends Controller
                     'code' => $request->validated('code'),
                     'address' => $request->validated('address'),
                     'phone' => $request->validated('phone'),
-                    'is_active' => $request->validated('is_active')
+                    'is_active' => $request->validated('is_active') ?? true
                 ]);
             });
             return redirect()->route('admin.outlets.index')->with('success', 'Outlet updated successfully');
