@@ -30,6 +30,11 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
+            $user = Auth::user();
+            if(!$user->is_active){
+                Auth::logout();
+                return back()->withErrors(['email' => 'Your acc is not active'])->onlyInput('email');
+            }
             return $this->redirectByRole();
         }
 

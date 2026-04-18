@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOutletRequest;
 use App\Http\Requests\UpdateOutletRequest;
 use App\Models\Outlet;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -23,7 +24,7 @@ class OutletController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('admin.outlets.create');
     }
@@ -31,7 +32,7 @@ class OutletController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreOutletRequest $request)
+    public function store(StoreOutletRequest $request): RedirectResponse
     {
         try {
             DB::transaction(function () use ($request) {
@@ -60,7 +61,7 @@ class OutletController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Outlet $outlet)
+    public function edit(Outlet $outlet): View
     {
         return view('admin.outlets.edit', compact('outlet'));
     }
@@ -68,7 +69,7 @@ class OutletController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOutletRequest $request, Outlet $outlet)
+    public function update(UpdateOutletRequest $request, Outlet $outlet): RedirectResponse
     {
         try {
             DB::transaction(function () use ($request, $outlet) {
@@ -89,7 +90,7 @@ class OutletController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Outlet $outlet)
+    public function destroy(Outlet $outlet): RedirectResponse
     {
         try{
             $outlet->delete();
