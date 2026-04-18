@@ -1,0 +1,101 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreOutletRequest;
+use App\Http\Requests\UpdateOutletRequest;
+use App\Models\Outlet;
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
+
+class OutletController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(): View
+    {
+        $outlets = Outlet::paginate(10);
+        return view('admin.outlets.index', compact('outlets'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('admin.outlets.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreOutletRequest $request)
+    {
+        try {
+            DB::transaction(function () use ($request) {
+                Outlet::create([
+                    'name' => $request->validated('name'),
+                    'code' => $request->validated('code'),
+                    'address' => $request->validated('address'),
+                    'phone' => $request->validated('phone'),
+                    'is_active' => $request->validated('is_active')
+                ]);
+            });
+            return redirect()->route('admin.outlets.index')->with('success', 'Outlet created successfully');
+        } catch (\Exception $error) {
+            return redirect()->back()->withErrors(['error' => $error->getMessage()]);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Outlet $outlet)
+    {
+        return view('admin.outlets.edit', compact('outlet'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateOutletRequest $request, Outlet $outlet)
+    {
+        try {
+            DB::transaction(function () use ($request, $outlet) {
+                $outlet->update([
+                    'name' => $request->validated('name'),
+                    'code' => $request->validated('code'),
+                    'address' => $request->validated('address'),
+                    'phone' => $request->validated('phone'),
+                    'is_active' => $request->validated('is_active')
+                ]);
+            });
+            return redirect()->route('admin.outlets.index')->with('success', 'Outlet updated successfully');
+        } catch (\Exception $error) {
+            return redirect()->back()->withErrors(['error' => $error->getMessage()]);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Outlet $outlet)
+    {
+        try{
+            $outlet->delete();
+            return redirect()->route('admin.outlets.index')->with('success', 'Outlet deleted succesfully');
+        }catch(\Exception $error){
+            return redirect()->back()->withErrors(['error' => $error->getMessage()]);
+        }
+    }
+}
