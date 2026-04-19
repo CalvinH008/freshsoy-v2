@@ -1,6 +1,18 @@
 @extends('layouts.app')
 @section('content')
     <h2>User Management</h2>
+    <form action=" {{ route('admin.users.index') }} " method="GET">
+        <input type="search" name="search" value=" {{ request('search') }} " placeholder="Find User">
+        <select name="role" id="">
+            <option value="" disabled selected>Role</option>
+            <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+            <option value="manager" {{ request('role') == 'manager' ? 'selected' : '' }}>Manager</option>
+            <option value="cashier"{{ request('role') == 'cashier' ? 'selected' : '' }}>Cashier</option>
+        </select>
+        <button type="submit" name="sort">Sort</button>
+        <a href="{{ route('admin.users.index') }}">Reset</a>
+    </form>
+
     <a href=" {{ route('admin.users.create') }} ">Add User</a>
     <table>
         <thead>

@@ -17,7 +17,7 @@
         <input type="password" name="password" placeholder="Password">
         <br>
         <select name="role" id="">
-            <option value="">--pilih role--</option>
+            <option value="" disabled selected>--pilih role--</option>
             <option value="admin">admin</option>
             <option value="manager">manager</option>
             <option value="cashier">cashier</option>

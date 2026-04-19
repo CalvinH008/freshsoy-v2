@@ -18,7 +18,7 @@
         <input type="password" name="password" placeholder="Password">
         <br>
         <select name="role" id="">
-            <option value="">--pilih role--</option>
+            <option value="" disabled selected >--pilih role--</option>
             <option value="admin" {{ old('role', $user->roles->first()->name ?? '') == 'admin' ? 'selected' : '' }}>admin
             </option>
             <option value="manager" {{ old('role', $user->roles->first()->name ?? '') == 'manager' ? 'selected' : '' }}>
