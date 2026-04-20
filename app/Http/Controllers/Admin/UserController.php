@@ -9,6 +9,7 @@ use App\Models\Outlet;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
@@ -19,13 +20,15 @@ class UserController extends Controller
      */
     public function index(): View
     {
-
+        Gate::authorize('viewAny', User::class);
         $users = User::query()
-        ->when(request('search'), fn($q, $v) => $q->where('name', 'LIKE', "%$v%")->orWhere('email', 'LIKE', "%$v%"))
-        ->when(request('role'), fn($q, $v) => $q->whereHas('roles', fn($r) => $r->where('name', $v))
-        )
-        ->with('roles')
-        ->paginate(10);
+            ->when(request('search'), fn($q, $v) => $q->where('name', 'LIKE', "%$v%")->orWhere('email', 'LIKE', "%$v%"))
+            ->when(
+                request('role'),
+                fn($q, $v) => $q->whereHas('roles', fn($r) => $r->where('name', $v))
+            )
+            ->with('roles')
+            ->paginate(10);
         return view('admin.users.index', compact('users'));
     }
 
@@ -34,6 +37,7 @@ class UserController extends Controller
      */
     public function create(): View
     {
+        Gate::authorize('create', User::class);
         $outlets = Outlet::all();
         return view('admin.users.create', compact('outlets'));
     }
@@ -43,6 +47,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
+        Gate::authorize('create', User::class);
         try {
             DB::transaction(function () use ($request) {
                 $user = User::create([
@@ -74,6 +79,7 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
+        Gate::authorize('update', $user);
         $outlets = Outlet::all();
         return view('admin.users.edit', compact('user', 'outlets'));
     }
@@ -83,6 +89,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
+        Gate::authorize('update', $user);
         try {
             DB::transaction(function () use ($request, $user) {
                 $user->update([
@@ -105,6 +112,7 @@ class UserController extends Controller
      */
     public function destroy(User $user): RedirectResponse
     {
+        Gate::authorize('delete', $user);
         try {
             $user->delete();
             return redirect()->route('admin.users.index')->with('success', 'User deleted successfully');

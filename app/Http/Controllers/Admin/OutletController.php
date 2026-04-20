@@ -92,10 +92,10 @@ class OutletController extends Controller
      */
     public function destroy(Outlet $outlet): RedirectResponse
     {
-        try{
+        try {
             $outlet->delete();
             return redirect()->route('admin.outlets.index')->with('success', 'Outlet deleted succesfully');
-        }catch(\Exception $error){
+        } catch (\Exception $error) {
             return redirect()->back()->withErrors(['error' => $error->getMessage()]);
         }
     }
