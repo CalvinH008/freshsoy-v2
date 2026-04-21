@@ -27,7 +27,7 @@ class UserController extends Controller
                 request('role'),
                 fn($q, $v) => $q->whereHas('roles', fn($r) => $r->where('name', $v))
             )
-            ->with('roles')
+            ->with(['roles', 'outlet'])
             ->paginate(10);
         return view('admin.users.index', compact('users'));
     }

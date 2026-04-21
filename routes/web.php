@@ -20,9 +20,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
-    Route::resource('/users', UserController::class);
+    Route::resource('/users', UserController::class)->except(['show']);
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle');
-    Route::resource('/outlets', OutletController::class);
+    Route::resource('/outlets', OutletController::class)->except(['show']);
 });
 
 Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])->group(function () {
