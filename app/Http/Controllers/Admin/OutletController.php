@@ -19,6 +19,7 @@ class OutletController extends Controller
     {
         $outlets = Outlet::query()
         ->when(request('search'), fn($q, $v) => $q->where('name', 'LIKE', "%$v%")->orWhere('address', 'LIKE', "%$v%"))
+        ->when(filled(request('is_active')), fn($q) => $q->where('is_active', request('is_active')))
         ->with(['user', 'orders', 'productStocks'])
         ->paginate(10);
         return view('admin.outlets.index', compact('outlets'));
