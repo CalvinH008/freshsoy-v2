@@ -4,9 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UpdateOutletRequest extends FormRequest
+class StoreCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +23,9 @@ class UpdateOutletRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
-            'code' => ['required', Rule::unique('outlets')->ignore($this->route('outlet'))],
-            'address' => ['required', 'string'],
-            'phone' => ['nullable', 'integer'],
+            'name' => ['required', 'max:255', 'string'],
+            'slug' => ['required', 'unique:categories,slug', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
             'is_active' => ['nullable', 'boolean']
         ];
     }

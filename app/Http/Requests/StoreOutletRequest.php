@@ -24,10 +24,10 @@ class StoreOutletRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'code' => ['required', 'string', 'unique:App\Models\Outlet,code'],
+            'code' => ['required', 'string', 'unique:outlets,code'],
             'address' => ['required', 'string'],
             'phone' => ['nullable', 'integer'],
-            'is_active' => ['nullable', 'bool']
+            'is_active' => ['nullable', 'boolean']
         ]; 
     }
 }
