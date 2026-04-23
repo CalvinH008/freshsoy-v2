@@ -24,7 +24,6 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255', 'string'],
-            'slug' => ['required', 'unique:categories,slug', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
             'is_active' => ['nullable', 'boolean']
         ];

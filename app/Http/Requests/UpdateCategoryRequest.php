@@ -24,8 +24,7 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'max:255', Rule::unique('categories', 'slug')->ignore($this->route('category'))],
+            'name' => ['required', 'string', 'max:255'], 
             'description' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean']
         ];

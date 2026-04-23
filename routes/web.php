@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admin\OutletController;
 use App\Http\Controllers\Admin\UserController;
@@ -23,6 +24,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::resource('/users', UserController::class)->except(['show']);
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle');
     Route::resource('/outlets', OutletController::class)->except(['show']);
+    Route::resource('/categories', CategoryController::class)->except(['show']);
 });
 
 Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])->group(function () {

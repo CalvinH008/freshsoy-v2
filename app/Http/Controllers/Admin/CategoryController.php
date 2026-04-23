@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -18,12 +19,12 @@ class CategoryController extends Controller
      */
     public function index(): View
     {
-        $category = Category::query()
+        $categories = Category::query()
             ->when(request('search'), fn($q, $v) => $q->where('name', 'LIKE', "%$v%")->orWhere('slug', 'LIKE', "%$v%"))
             ->when(filled(request('is_active')), fn($q) => $q->where('is_active', request('is_active')))
             ->with(['products'])
             ->paginate(5);
-        return view('admin.categories.index', compact('category'));
+        return view('admin.categories.index', compact('categories'));
     }
 
     /**
@@ -37,13 +38,13 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreCategoryRequest $request): RedirectResponse
     {
         try {
             DB::transaction(function () use ($request) {
                 Category::create([
                     'name' => $request->validated('name'),
-                    'slug' => $category->slug ?? Str::slug($request->validated('name')),
+                    'slug' => Str::slug($request->validated('name')),
                     'description' => $request->validated('description'),
                     'is_active' => $request->validated('is_active') ?? true
                 ]);
@@ -65,7 +66,7 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
+    public function edit(Category $category): View
     {
         return view('admin.categories.edit', compact('category'));
     }
@@ -73,7 +74,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category): RedirectResponse
     {
         try {
             DB::transaction(function () use ($request, $category) {
@@ -83,8 +84,8 @@ class CategoryController extends Controller
                     'description' => $request->validated('description'),
                     'is_active' => $request->validated('is_active') ?? true
                 ]);
-                return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully');
             });
+            return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully');
         } catch (\Exception $error) {
             return redirect()->back()->withErrors(['error' => $error->getMessage()]);
         }
@@ -93,7 +94,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(Category $category): RedirectResponse
     {
         try {
             $category->delete();
