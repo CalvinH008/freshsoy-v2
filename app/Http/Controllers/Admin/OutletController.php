@@ -17,11 +17,17 @@ class OutletController extends Controller
      */
     public function index(): View
     {
-        $outlets = Outlet::query()
-        ->when(request('search'), fn($q, $v) => $q->where('name', 'LIKE', "%$v%")->orWhere('address', 'LIKE', "%$v%"))
-        ->when(filled(request('is_active')), fn($q) => $q->where('is_active', request('is_active')))
-        ->with(['user', 'orders', 'productStocks'])
-        ->paginate(10);
+        $outlets = Outlet::with(['user', 'orders', 'productStocks'])
+            ->when(request('search'), function ($q, $v) {
+                $q->where(function ($query) use($v) {
+                    $query->where('name', 'LIKE', "%$v%")
+                        ->orWhere('address', 'LIKE', "%$v%");
+                }); 
+            })
+            ->when(filled(request('is_active')), function ($q) {
+                $q->where('is_active', request('is_active'));
+            })
+            ->paginate(12);
         return view('admin.outlets.index', compact('outlets'));
     }
 

@@ -19,10 +19,16 @@ class CategoryController extends Controller
      */
     public function index(): View
     {
-        $categories = Category::query()
-            ->when(request('search'), fn($q, $v) => $q->where('name', 'LIKE', "%$v%")->orWhere('slug', 'LIKE', "%$v%"))
-            ->when(filled(request('is_active')), fn($q) => $q->where('is_active', request('is_active')))
-            ->with(['products'])
+        $categories = Category::withCount(['products'])
+            ->when(request('search'), function ($q, $v) {
+                $q->where(function ($query) use ($v) {
+                    $query->where('name', 'LIKE', "%$v%")
+                        ->orWhere('slug', 'LIKE', "%$v%");
+                });
+            })
+            ->when(filled(request('is_active')), function ($q) {
+                $q->where('is_active', request('is_active'));
+            })
             ->paginate(5);
         return view('admin.categories.index', compact('categories'));
     }

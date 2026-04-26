@@ -1,7 +1,0 @@
-buat route category
-gunakan best practice filtering dan search
-bikin blade category(
-    admin/categories/index
-    admin/categories/create
-    admin/categories/edit
-)
