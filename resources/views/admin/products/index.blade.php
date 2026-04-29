@@ -22,6 +22,8 @@
                 <th>Name</th>
                 <th>Price</th>
                 <th>Description</th>
+                <th>Variants</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -37,6 +39,7 @@
                     <td> {{ $product->name }} </td>
                     <td> {{ $product->price }} </td>
                     <td> {{ $product->description }} </td>
+                    <td> {{ $product->variants->count() }} variant</td>
                     <td>
                         <a href=" {{ route('admin.products.edit', $product) }} ">edit</a>
                         <form action=" {{ route('admin.products.destroy', $product) }} " method="POST">

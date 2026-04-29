@@ -27,6 +27,18 @@
         <input type="checkbox" name="is_active" value="1" checked>
         <label for="">Active</label>
         <br>
+        <!-- Variant Section -->
+        <div x-data="productForm()">
+            <button type="button" @click="addVariant()">Tambah Variant</button>
+
+            <template x-for="(variant, index) in variants" :key="index">
+                <div>
+                    <input type="text" :name="'variants[' + index + '][size]'" placeholder="Size (S/M/L)">
+                    <input type="number" :name="'variants[' + index + '][price]'" placeholder="Harga">
+                    <button type="button" @click="removeVariant(index)">Hapus</button>
+                </div>
+            </template>
+        </div>
         <button type="submit">add</button>
     </form>
 @endsection

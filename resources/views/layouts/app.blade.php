@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>FreshSoy - @yield('title')</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body>
@@ -13,10 +14,10 @@
     @include('partials.sidebar')
     <main>
         @if (session('success'))
-            <x-alert type = "success" :message="session('success')"/>
+            <x-alert type = "success" :message="session('success')" />
         @endif
         @if (session('error'))
-            <x-alert type = "error" :message="session('error')"/>
+            <x-alert type = "error" :message="session('error')" />
         @endif
         @yield('content')
     </main>
