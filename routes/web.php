@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admin\OutletController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Manager\DashboardController as ManagerDashboard;
 use App\Http\Controllers\Cashier\DashboardController as CashierDashboard;
@@ -25,6 +26,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle');
     Route::resource('/outlets', OutletController::class)->except(['show']);
     Route::resource('/categories', CategoryController::class)->except(['show']);
+    Route::resource('/products', ProductController::class)->except(['show']);
 });
 
 Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])->group(function () {
