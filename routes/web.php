@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admin\OutletController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Manager\DashboardController as ManagerDashboard;
 use App\Http\Controllers\Cashier\DashboardController as CashierDashboard;
@@ -27,6 +28,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::resource('/outlets', OutletController::class)->except(['show']);
     Route::resource('/categories', CategoryController::class)->except(['show']);
     Route::resource('/products', ProductController::class)->except(['show']);
+    Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
+    Route::put('/stocks', [StockController::class, 'update'])->name('stocks.update');
 });
 
 Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])->group(function () {
