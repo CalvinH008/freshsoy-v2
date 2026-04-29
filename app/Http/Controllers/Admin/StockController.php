@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Outlet;
 use App\Models\Product;
 use App\Models\ProductStock;
 use Illuminate\Http\RedirectResponse;
@@ -14,8 +15,9 @@ class StockController extends Controller
 {
     public function index(): View
     {
-        $stocks = Product::with(['variants.stocks'])->paginate(10);
-        return view('admin.stocks.index', compact('stocks'));
+        $outlets = Outlet::all();
+        $products = Product::with(['variants.stocks'])->paginate(10);
+        return view('admin.stocks.index', compact('products', 'outlets'));
     }
 
     public function update(Request $request): RedirectResponse

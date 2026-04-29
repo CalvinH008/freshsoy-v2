@@ -13,6 +13,7 @@
     </form>
 
     <a href=" {{ route('admin.products.create') }} ">Add Products</a>
+    <a href=" {{ route('admin.stocks.index') }} ">Stock Management</a>
     <table>
         <thead>
             <tr>
@@ -23,6 +24,7 @@
                 <th>Price</th>
                 <th>Description</th>
                 <th>Variants</th>
+                <th>Stock</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -40,6 +42,7 @@
                     <td> {{ $product->price }} </td>
                     <td> {{ $product->description }} </td>
                     <td> {{ $product->variants->count() }} variant</td>
+                    <td> {{ $product->variants->sum(fn($v) => $v->stocks->sum('stock')) }} </td>
                     <td>
                         <a href=" {{ route('admin.products.edit', $product) }} ">edit</a>
                         <form action=" {{ route('admin.products.destroy', $product) }} " method="POST">

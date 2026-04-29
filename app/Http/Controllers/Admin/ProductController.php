@@ -19,7 +19,7 @@ class ProductController extends Controller
      */
     public function index(): View
     {
-        $products = Product::with(['category', 'variants'])
+        $products = Product::with(['category', 'variants.stocks'])
             ->when(request('search'), function ($q, $v) {
                 $q->where(function ($query) use ($v) {
                     $query->where('name', 'LIKE', "%$v%")
