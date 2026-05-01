@@ -29,6 +29,18 @@
                 </option>
             @endforeach
         </select>
+        <!-- Variant Section -->
+        <div x-data="productForm( {{$product->variants}} )">
+            <button type="button" @click="addVariant()">Edit Variant</button>
+
+            <template x-for="(variant, index) in variants" :key="index">
+                <div>
+                    <input type="text" :name="'variants[' + index + '][size]'" :value="variant.size" placeholder="Size (S/M/L)">
+                    <input type="number" :name="'variants[' + index + '][price]'" :value="variant.price" placeholder="Harga">
+                    <button type="button" @click="removeVariant(index)">Hapus</button>
+                </div>
+            </template>
+        </div>
         <textarea name="description" id="" cols="30" rows="10" placeholder="Description">{{ old('description', $product->description) }}</textarea>
         <br>
         <input type="checkbox" name="is_active" value="1" {{ old('is_active', $product->is_active) ? 'checked' : '' }}>

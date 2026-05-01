@@ -1,8 +1,11 @@
-export function productForm(){
+export function productForm(initialVariants = []){
     return {
-        variants: [],
+        variants: initialVariants,
         addVariant(){
-            this.variants.push({size:'', price:''})
+            this.variants.push({
+                size:'', 
+                price:''
+            })
         },
 
         removeVariant(index){
