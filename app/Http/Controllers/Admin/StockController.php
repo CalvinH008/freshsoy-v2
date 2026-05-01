@@ -16,7 +16,7 @@ class StockController extends Controller
     public function index(): View
     {
         $outlets = Outlet::all();
-        $products = Product::with(['variants.stocks'])->paginate(10);
+        $products = Product::with(['variants.stocks'])->get();
         return view('admin.stocks.index', compact('products', 'outlets'));
     }
 
