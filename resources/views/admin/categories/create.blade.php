@@ -1,22 +1,45 @@
 @extends('layouts.app')
+@section('title', 'Add Category')
 @section('content')
-    <h2>Add Category</h2>
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                <li> {{ $error }} </li>
-            @endforeach
-        </div>
-    @endif
-    <form action=" {{ route('admin.categories.store') }} " method="POST">
-        @csrf
-        <input type="text" name="name" placeholder="Nama">
-        <br>
-        <textarea name="description" id="" cols="30" rows="10" placeholder="Description"></textarea>
-        <br>
-        <input type="checkbox" name="is_active" value="1" checked>
-        <label for="">Active</label>
-        <br>
-        <button type="submit">add</button>
-    </form>
+
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Add Category</h2>
+        <a href="{{ route('admin.categories.index') }}"
+            class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+            Back
+        </a>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6 max-w-2xl">
+        @if ($errors->any())
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+                @foreach ($errors->all() as $error)
+                    <p class="text-sm">{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
+
+        <form action="{{ route('admin.categories.store') }}" method="POST" class="space-y-4">
+            @csrf
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input type="text" name="name" value="{{ old('name') }}"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea name="description" rows="4"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Category description...">{{ old('description') }}</textarea>
+            </div>
+            <div class="flex items-center gap-2">
+                <input type="checkbox" name="is_active" value="1" checked id="is_active">
+                <label for="is_active" class="text-sm text-gray-700">Active</label>
+            </div>
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                Save
+            </button>
+        </form>
+    </div>
+
 @endsection
