@@ -22,12 +22,21 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
+    // dashboard admin
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
+    // crud user
     Route::resource('/users', UserController::class)->except(['show']);
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle');
+    // crud outlet
     Route::resource('/outlets', OutletController::class)->except(['show']);
+    Route::patch('outlets/{outlet}/toggle', [OutletController::class, 'toggleStatus'])->name('outlets.toggle');
+    // crud category
     Route::resource('/categories', CategoryController::class)->except(['show']);
+    Route::patch('/categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus'])->name('categories.toggle');
+    // crud product
     Route::resource('/products', ProductController::class)->except(['show']);
+    Route::patch('/products/{product}/toggle', [ProductController::class, 'toggleStatus'])->name('products.toggle');
+    // stock management
     Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
     Route::put('/stocks', [StockController::class, 'update'])->name('stocks.update');
 });

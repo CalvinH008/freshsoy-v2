@@ -109,4 +109,12 @@ class CategoryController extends Controller
             return redirect()->back()->withErrors(['error' => $error->getMessage()]);
         }
     }
+
+    public function toggleStatus(Category $category): RedirectResponse{
+        $category->update([
+            'is_active' => !$category->is_active
+        ]);
+        return back();
+    }
 }
+        

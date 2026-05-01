@@ -17,7 +17,7 @@ class OutletController extends Controller
      */
     public function index(): View
     {
-        $outlets = Outlet::with(['user', 'orders', 'productStocks'])
+        $outlets = Outlet::with(['users', 'orders', 'productStocks'])
             ->when(request('search'), function ($q, $v) {
                 $q->where(function ($query) use($v) {
                     $query->where('name', 'LIKE', "%$v%")
@@ -27,7 +27,7 @@ class OutletController extends Controller
             ->when(filled(request('is_active')), function ($q) {
                 $q->where('is_active', request('is_active'));
             })
-            ->paginate(12);
+            ->paginate(5);
         return view('admin.outlets.index', compact('outlets'));
     }
 
@@ -108,5 +108,12 @@ class OutletController extends Controller
         } catch (\Exception $error) {
             return redirect()->back()->withErrors(['error' => $error->getMessage()]);
         }
+    }
+
+    public function toggleStatus(Outlet $outlet): RedirectResponse{
+        $outlet->update([
+            'is_active' => !$outlet->is_active
+        ]);
+        return back();
     }
 }

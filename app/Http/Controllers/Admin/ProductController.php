@@ -145,4 +145,11 @@ class ProductController extends Controller
             return redirect()->back()->withErrors(['error' => $error->getMessage()]);
         }
     }
+
+    public function toggleStatus(Product $product): RedirectResponse{
+        $product->update([
+            'is_active' => !$product->is_active
+        ]);
+        return back();
+    }
 }

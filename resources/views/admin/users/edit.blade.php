@@ -1,38 +1,74 @@
 @extends('layouts.app')
+@section('title', 'Edit User')
 @section('content')
-    <h2>edit user</h2>
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                <li> {{ $error }} </li>
-            @endforeach
-        </div>
-    @endif
-    <form action=" {{ route('admin.users.update', $user) }} " method="POST">
-        @csrf
-        @method('PUT')
-        <input type="text" name="name" placeholder="Nama" value=" {{ old('name', $user->name) }} ">
-        <br>
-        <input type="email" name="email" placeholder="Email" value=" {{ old('email', $user->email) }} ">
-        <br>
-        <input type="password" name="password" placeholder="Password">
-        <br>
-        <select name="role" id="">
-            <option value="" disabled selected >--pilih role--</option>
-            <option value="admin" {{ old('role', $user->roles->first()->name ?? '') == 'admin' ? 'selected' : '' }}>admin
-            </option>
-            <option value="manager" {{ old('role', $user->roles->first()->name ?? '') == 'manager' ? 'selected' : '' }}>
-                manager</option>
-            <option value="cashier" {{ old('role', $user->roles->first()->name ?? '') == 'cashier' ? 'selected' : '' }}>
-                cashier</option>
-        </select>
-        <br>
-        <select name="outlet_id" id="">
-            @foreach ($outlets as $outlet)
-                <option value="{{ $outlet->id }}"
-                    {{ old('outlet_id', $user->outlet_id) == $outlet->id ? 'selected' : '' }}>{{ $outlet->name }}</option>
-            @endforeach
-        </select>
-        <button type="submit">add</button>
-    </form>
+
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Edit User</h2>
+        <a href="{{ route('admin.users.index') }}"
+            class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+            Back
+        </a>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6 max-w-2xl">
+        @if ($errors->any())
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+                @foreach ($errors->all() as $error)
+                    <p class="text-sm">{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
+
+        <form action="{{ route('admin.users.update', $user) }}" method="POST" class="space-y-4">
+            @csrf
+            @method('PUT')
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input type="text" name="name" value="{{ old('name', $user->name) }}"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" name="email" value="{{ old('email', $user->email) }}"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Password
+                    <span class="text-gray-400 text-xs">(kosongkan jika tidak ingin mengubah)</span>
+                </label>
+                <input type="password" name="password"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                <select name="role"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="" disabled>Pilih Role</option>
+                    <option value="admin"
+                        {{ old('role', $user->roles->first()->name ?? '') == 'admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="manager"
+                        {{ old('role', $user->roles->first()->name ?? '') == 'manager' ? 'selected' : '' }}>Manager</option>
+                    <option value="cashier"
+                        {{ old('role', $user->roles->first()->name ?? '') == 'cashier' ? 'selected' : '' }}>Cashier</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Outlet</label>
+                <select name="outlet_id"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Pilih Outlet (opsional untuk admin)</option>
+                    @foreach ($outlets as $outlet)
+                        <option value="{{ $outlet->id }}"
+                            {{ old('outlet_id', $user->outlet_id) == $outlet->id ? 'selected' : '' }}>
+                            {{ $outlet->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                Update
+            </button>
+        </form>
+    </div>
+
 @endsection
