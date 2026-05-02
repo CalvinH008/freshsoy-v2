@@ -66,7 +66,7 @@
         <div class="mt-6">
             <button type="submit"
                 class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition font-medium">
-                Save All Stock
+                Save 
             </button>
         </div>
     </form>
