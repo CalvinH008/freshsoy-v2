@@ -1,1 +1,6 @@
-buat ui dashboard admin, fix ui auth
+yang harus ditambahin (manager):
+- stock management
+- laporan penjualan
+- bisa liat produk yang muncul tapi gabisa melakukan aksinya cuma bisa liat
+- tampilkan semua link untuk mengakses url, tapi gabisa diakses jika diakses tampilkan forbidden
+

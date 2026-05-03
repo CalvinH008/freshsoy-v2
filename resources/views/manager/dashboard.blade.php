@@ -28,7 +28,10 @@
             <table class="w-full text-sm mt-6">
                 <thead>
                     <tr>
+                        <th class="text-left p-3 text-gray-500 font-medium">#</th>
                         <th class="text-left p-3 text-gray-500 font-medium">Product</th>
+                        <th class="text-left p-3 text-gray-500 font-medium">Image</th>
+                        <th class="text-left p-3 text-gray-500 font-medium">Category</th>
                         <th class="text-left p-3 text-gray-500 font-medium">Variant</th>
                         <th class="text-left p-3 text-gray-500 font-medium">Stock</th>
                         <th class="text-left p-3 text-gray-500 font-medium">Status</th>
@@ -37,7 +40,20 @@
                 <tbody>
                     @forelse ($lowStocks as $stock)
                         <tr>
+                            <td class="p-3 border-t border-gray-100"> {{ $loop->iteration}} </td>
                             <td class="p-3 border-t border-gray-100"> {{ $stock->variant->product->name }} </td>
+                            <td>
+                                @if ($stock->variant->product->image)
+                                    <img src="{{ asset('storage/' . $stock->variant->product->image) }}"
+                                        class="w-10 h-10 object-cover rounded-lg">
+                                @else
+                                    <div
+                                        class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 text-xs">
+                                        No img
+                                    </div>
+                                @endif
+                            </td>
+                            <td class="p-3 border-t border-gray-100"> {{ $stock->variant->product->category->name }} </td>
                             <td class="p-3 border-t border-gray-100"> {{ $stock->variant->size }} </td>
                             <td class="p-3 border-t border-gray-100"> {{ $stock->stock }} </td>
                             <td class="p-3 border-t border-gray-100">
@@ -50,7 +66,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="p-4 text-center text-gray-500">
+                            <td colspan="7" class="p-4 text-center text-gray-500">
                                 Semua stok aman
                             </td>
                         </tr>

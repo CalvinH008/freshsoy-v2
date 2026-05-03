@@ -24,7 +24,10 @@ class DashboardController extends Controller
         $totalCashiers = User::where('outlet_id', $outlet->id)
             ->role('cashier')
             ->count();
-        $lowStocks = $outlet->productStocks()->where('stock', '<', 10)->with(['variant.product'])->orderBy('stock', 'asc')->get();
+        $lowStocks = $outlet->productStocks()->where('stock', '<', 10)
+            ->with(['variant.product.category'])
+            ->orderBy('stock', 'asc')
+            ->get();
         return view('manager.dashboard', compact('outlet', 'totalProducts', 'totalStock', 'totalCashiers', 'lowStocks'));
     }
 }
