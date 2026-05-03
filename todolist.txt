@@ -7,3 +7,8 @@ Pantau kondisi outlet — penjualan hari ini, jumlah transaksi, stok rendah
 Kelola stok — lihat dan update stok per varian per outlet
 Pantau penjualan — laporan harian, bulanan, produk terlaris
 Export laporan — download PDF untuk dilaporkan ke atasan
+
+
+
+role baru(inventory):
+query baru di admin karena ada model stockMovement untuk ngetrack history perubahan stock

@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Manager\DashboardController as ManagerDashboard;
 use App\Http\Controllers\Cashier\DashboardController as CashierDashboard;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Inventory\DashboardController as InventoryDashboard;
+use App\Http\Controllers\Manager\ProductController as ManagerProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -42,7 +44,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 });
 
 Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])->group(function () {
-   Route::get('/dashboard', [ManagerDashboard::class, 'index'])->name('dashboard');
+    // dashboard manager
+    Route::get('/dashboard', [ManagerDashboard::class, 'index'])->name('dashboard');
+    // view produk manager
+    Route::get('/products', [ManagerProductController::class, 'index'])->name('products.index');
+});
+
+Route::prefix('inventory')->name('inventory.')->middleware(['auth', 'role:inventory'])->group(function () {
+    Route::get('/dashboard', [InventoryDashboard::class, 'index'])->name('dashboard');
 });
 
 Route::prefix('cashier')->name('cashier.')->middleware(['auth', 'role:cashier'])->group(function () {

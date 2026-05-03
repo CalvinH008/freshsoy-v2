@@ -24,4 +24,8 @@ class Outlet extends Model
     {
         return $this->hasMany(ProductStock::class);
     }
+
+    public function stockMovements(){
+        return $this->hasMany(StockMovement::class);
+    }
 }

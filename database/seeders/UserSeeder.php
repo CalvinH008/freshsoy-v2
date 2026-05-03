@@ -43,5 +43,15 @@ class UserSeeder extends Seeder
         ]);
 
         $cashier->assignRole('cashier');
+
+        $inventory = User::create([
+            'name' => 'Inventory',
+            'email' => 'inventory@freshsoy.com',
+            'password' => Hash::make('password'),
+            'outlet_id' => null,
+            'is_active' => true
+        ]);
+        
+        $inventory->assignRole('inventory');
     }
 }

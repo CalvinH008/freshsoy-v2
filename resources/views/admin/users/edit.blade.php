@@ -50,6 +50,8 @@
                         {{ old('role', $user->roles->first()->name ?? '') == 'manager' ? 'selected' : '' }}>Manager</option>
                     <option value="cashier"
                         {{ old('role', $user->roles->first()->name ?? '') == 'cashier' ? 'selected' : '' }}>Cashier</option>
+                    <option value="inventory"
+                        {{ old('role', $user->roles->first()->name ?? '') == 'inventory' ? 'selected' : '' }}>Inventory</option>
                 </select>
             </div>
             <div>

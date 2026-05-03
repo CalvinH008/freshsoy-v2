@@ -60,6 +60,9 @@ class AuthController extends Controller
         if ($user->hasRole('manager')) {
             return redirect()->route('manager.dashboard');
         }
+         if ($user->hasRole('inventory')) {
+            return redirect()->route('inventory.dashboard');
+        }
 
         return redirect()->route('cashier.pos');
     }

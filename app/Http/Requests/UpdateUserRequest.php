@@ -26,7 +26,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'email' => ['required', Rule::unique('users')->ignore($this->route('user'))],
-            'role' => ['required', 'in:admin,manager,cashier'],
+            'role' => ['required', 'in:admin,manager,cashier,inventory'],
             'outlet_id' => ['required_unless:role,admin'],
             'password'=> ['nullable', 'string', 'min:8'],
         ];

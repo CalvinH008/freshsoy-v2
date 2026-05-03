@@ -26,7 +26,7 @@ class StoreUserRequest extends FormRequest
             'name' => ['required', 'string'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:8'],
-            'role' => ['required', 'in:admin,manager,cashier'],
+            'role' => ['required', 'in:admin,manager,cashier,inventory'],
             'outlet_id' => [
                 'required_unless:role,admin',
                 'nullable',
