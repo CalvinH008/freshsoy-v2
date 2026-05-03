@@ -13,6 +13,9 @@ class ProductController extends Controller
     {
         $outletId = $request->outlet_id;
         $products = Product::with(['category', 'variants.stocks' => fn($q) => $q->where('outlet_id', $outletId)])
+            ->when($request->search, function ($q, $search) {
+                $q->where('name', "LIKE", "%{$search}%");
+            })
             ->where('is_active', true)
             ->get();
         return ProductResource::collection($products);

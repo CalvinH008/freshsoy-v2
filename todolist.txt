@@ -3,4 +3,7 @@ yang harus ditambahin (manager):
 - laporan penjualan
 - bisa liat produk yang muncul tapi gabisa melakukan aksinya cuma bisa liat
 - tampilkan semua link untuk mengakses url, tapi gabisa diakses jika diakses tampilkan forbidden
-
+Pantau kondisi outlet — penjualan hari ini, jumlah transaksi, stok rendah
+Kelola stok — lihat dan update stok per varian per outlet
+Pantau penjualan — laporan harian, bulanan, produk terlaris
+Export laporan — download PDF untuk dilaporkan ke atasan
