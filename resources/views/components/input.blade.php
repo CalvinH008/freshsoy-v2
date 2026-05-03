@@ -1,9 +1,9 @@
 @props(['name', 'label' => '', 'type' => 'text', 'value' => ''])
 <div>
     @if ($label)
-        <label for=""> {{$label}} </label>
+        <label for="{{$name}}" > {{$label}} </label>
     @endif
-    <input type=" {{$type}} " name=" {{$name}} " value="{{$value}} ">
+    <input type="{{$type}}" name="{{$name}}" value="{{$value}}" id="{{$name}}">
     @error($name)
         <span> {{ $message }} </span>
     @enderror
