@@ -32,7 +32,11 @@ class StockController extends Controller
             foreach ($request->stocks as $variantId => $outletStocks) {
                 foreach ($outletStocks as $outletId => $qty) {
                     $stockBefore = ProductStock::where('product_variant_id', $variantId)->where('outlet_id', $outletId)->first()?->stock ?? 0;
-                    
+
+                    if ($stockBefore == $qty) {
+                        continue;
+                    }
+
                     ProductStock::updateOrCreate(
                         [
                             'product_variant_id' => $variantId,
@@ -43,12 +47,14 @@ class StockController extends Controller
                         ]
                     );
 
+                    $diff = $qty - $stockBefore;
+
                     StockMovement::create([
                         'product_variant_id' => $variantId,
                         'user_id' => Auth::id(),
                         'outlet_id' => $outletId,
                         'type' => 'adjustment',
-                        'quantity' => $qty - $stockBefore,
+                        'quantity' => abs($diff),
                         'stock_before' => $stockBefore,
                         'stock_after' => $qty,
                         'note' => 'manual'

@@ -11,6 +11,7 @@ use App\Http\Controllers\Manager\DashboardController as ManagerDashboard;
 use App\Http\Controllers\Cashier\DashboardController as CashierDashboard;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Inventory\DashboardController as InventoryDashboard;
+use App\Http\Controllers\Inventory\StockController as InventoryStockController;
 use App\Http\Controllers\Manager\ProductController as ManagerProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,8 +53,10 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])
     Route::get('/products', [ManagerProductController::class, 'index'])->name('products.index');
 });
 
-Route::prefix('inventory')->name('inventory.')->middleware(['auth', 'role:inventory'])->group(function () {
+Route::prefix('inventory')->name('inventory.')->group(function () {
     Route::get('/dashboard', [InventoryDashboard::class, 'index'])->name('dashboard');
+    Route::get('/stocks', [InventoryStockController::class, 'index'])->name('stocks.index');
+    Route::post('/stocks/update', [InventoryStockController::class, 'update'])->name('stocks.update');
 });
 
 Route::prefix('cashier')->name('cashier.')->middleware(['auth', 'role:cashier'])->group(function () {
