@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Outlet;
 use App\Models\Product;
 use App\Models\ProductStock;
+use App\Models\StockMovement;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -29,6 +31,8 @@ class StockController extends Controller
         DB::transaction(function () use ($request) {
             foreach ($request->stocks as $variantId => $outletStocks) {
                 foreach ($outletStocks as $outletId => $qty) {
+                    $stockBefore = ProductStock::where('product_variant_id', $variantId)->where('outlet_id', $outletId)->first()?->stock ?? 0;
+                    
                     ProductStock::updateOrCreate(
                         [
                             'product_variant_id' => $variantId,
@@ -38,6 +42,17 @@ class StockController extends Controller
                             'stock' => $qty
                         ]
                     );
+
+                    StockMovement::create([
+                        'product_variant_id' => $variantId,
+                        'user_id' => Auth::id(),
+                        'outlet_id' => $outletId,
+                        'type' => 'adjustment',
+                        'quantity' => $qty - $stockBefore,
+                        'stock_before' => $stockBefore,
+                        'stock_after' => $qty,
+                        'note' => 'manual'
+                    ]);
                 }
             }
         });
