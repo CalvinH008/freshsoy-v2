@@ -12,6 +12,7 @@ use App\Http\Controllers\Cashier\DashboardController as CashierDashboard;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Inventory\DashboardController as InventoryDashboard;
 use App\Http\Controllers\Inventory\StockController as InventoryStockController;
+use App\Http\Controllers\Inventory\StockMovementController as InventoryStockMovementController;
 use App\Http\Controllers\Manager\ProductController as ManagerProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,7 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     // dashboard admin
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
@@ -46,6 +48,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
 });
 
+// Manager Routes
 Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])->group(function () {
     // dashboard manager
     Route::get('/dashboard', [ManagerDashboard::class, 'index'])->name('dashboard');
@@ -53,12 +56,17 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])
     Route::get('/products', [ManagerProductController::class, 'index'])->name('products.index');
 });
 
+// Inventory Routes
 Route::prefix('inventory')->name('inventory.')->group(function () {
+    // dashboard inventory
     Route::get('/dashboard', [InventoryDashboard::class, 'index'])->name('dashboard');
+    // stock management
     Route::get('/stocks', [InventoryStockController::class, 'index'])->name('stocks.index');
     Route::put('/stocks/update', [InventoryStockController::class, 'update'])->name('stocks.update');
+    Route::get('stock-movements', [InventoryStockMovementController::class, 'index'])->name('stock-movements.index');
 });
 
+// Cashier Routes
 Route::prefix('cashier')->name('cashier.')->middleware(['auth', 'role:cashier'])->group(function () {
     Route::get('/pos', [CashierDashboard::class, 'index'])->name('pos');
 });
