@@ -56,7 +56,7 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])
 Route::prefix('inventory')->name('inventory.')->group(function () {
     Route::get('/dashboard', [InventoryDashboard::class, 'index'])->name('dashboard');
     Route::get('/stocks', [InventoryStockController::class, 'index'])->name('stocks.index');
-    Route::post('/stocks/update', [InventoryStockController::class, 'update'])->name('stocks.update');
+    Route::put('/stocks/update', [InventoryStockController::class, 'update'])->name('stocks.update');
 });
 
 Route::prefix('cashier')->name('cashier.')->middleware(['auth', 'role:cashier'])->group(function () {
