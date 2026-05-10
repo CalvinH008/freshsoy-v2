@@ -7,6 +7,6 @@
     <title>POS</title>
 </head>
 <body>
-    
+    <h1>POS</h1>
 </body>
 </html>

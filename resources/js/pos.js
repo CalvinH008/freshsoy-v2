@@ -14,21 +14,22 @@ export function productForm(initialVariants = []) {
     };
 }
 
-export function posSystem() {
+export function posSystem(outletId = null) {
     return {
         products: [],
         cart: [],
         search: "",
-        outletId: null,
+        outletId: outletId,
 
         init() {
+            console.log('outlet_id', this.outletId)
             this.getProduct();
         },
 
         async getProduct() {
             try {
                 const result = await axios.get(
-                    `api/products?outlet_id=${this.outletId}`,
+                    `/api/products?outlet_id=${this.outletId}`,
                 );
                 this.products = result.data.data;
                 console.log("data dari backend", this.products);
@@ -43,27 +44,34 @@ export function posSystem() {
             );
 
             if (existing) {
-                // increment quantity
-                existing.quantity++;
+                if (existing.quantity < variant.stock) {
+                    // increment quantity
+                    existing.quantity++;
+                }
             } else {
                 // push item baru
                 this.cart.push({
                     variantId: variant.id,
                     name: productName,
                     size: variant.size,
-                    price: variant.price,
-                    stock: variant.stock,
+                    price: Number(variant.price),
+                    stock: Number(variant.stock),
                     quantity: 1,
                 });
             }
         },
 
-        removeFromCart(variantId){
-            this.cart = this.cart.filter(item => item.variantId !== variantId)
+        removeFromCart(variantId) {
+            this.cart = this.cart.filter(
+                (item) => item.variantId !== variantId,
+            );
         },
 
-        get total(){
-            return this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-        }
+        get total() {
+            return this.cart.reduce(
+                (sum, item) => sum + item.price * item.quantity,
+                0,
+            );
+        },
     };
 }

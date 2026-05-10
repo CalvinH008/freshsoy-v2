@@ -8,7 +8,9 @@ use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index(): View{
-        return view('cashier.pos');
+    public function index(): View
+    {
+        $outletId = auth()->user()->outlet_id;
+        return view('cashier.pos', compact('outletId'));
     }
 }
