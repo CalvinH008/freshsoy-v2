@@ -73,5 +73,12 @@ export function posSystem(outletId = null) {
                 0,
             );
         },
+
+        get change(){
+            return this.amountPaid >= this.total ? this.amountPaid - this.total : 0
+        },
+
+        showModal: false,
+        amountPaid: 0,
     };
 }

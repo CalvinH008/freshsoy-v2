@@ -109,12 +109,27 @@
                     :class="cart.length === 0 ?
                         'bg-gray-200 text-gray-400 cursor-not-allowed' :
                         'bg-blue-600 text-white hover:bg-blue-700'"
-                    :disabled="cart.length === 0">
+                    :disabled="cart.length === 0" x-on:click="showModal = true">
                     Proses Pembayaran
                 </button>
             </div>
         </div>
 
+        {{-- MODAL PEMBAYARAN --}}
+        <div x-show="showModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-xl p-6 w-96">
+                {{-- total --}}
+                <p x-text=" 'Rp'  + total.toLocaleString('id-ID')"></p>
+                {{-- input nominal bayar --}}
+                <input type="number" x-model="amountPaid" placeholder="bayar">
+                {{-- kembalian --}}
+                <p x-text="'Rp ' + change.toLocaleString('id-ID')"></p>
+                {{-- tombol konfirmasi --}}
+                <button @click="bayar()">Konfirmasi</button>
+                {{-- tombol batal --}}
+                <button @click="showModal = false">Batal</button>
+            </div>
+        </div>
     </div>
 
 @endsection
