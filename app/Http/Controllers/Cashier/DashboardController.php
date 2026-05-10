@@ -11,6 +11,6 @@ class DashboardController extends Controller
     public function index(): View
     {
         $outletId = auth()->user()->outlet_id;
-        return view('cashier.pos', compact('outletId'));
+        return view('cashier.pos.index', compact('outletId'));
     }
 }
