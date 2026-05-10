@@ -115,21 +115,52 @@
             </div>
         </div>
 
-        {{-- MODAL PEMBAYARAN --}}
-        <div x-show="showModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div class="bg-white rounded-xl p-6 w-96">
-                {{-- total --}}
-                <p x-text=" 'Rp'  + total.toLocaleString('id-ID')"></p>
-                {{-- input nominal bayar --}}
-                <input type="number" x-model="amountPaid" placeholder="bayar">
-                {{-- kembalian --}}
-                <p x-text="'Rp ' + change.toLocaleString('id-ID')"></p>
-                {{-- tombol konfirmasi --}}
-                <button @click="bayar()">Konfirmasi</button>
-                {{-- tombol batal --}}
-                <button @click="showModal = false">Batal</button>
+        <div x-show="showModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" x-transition>
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4">
+                {{-- header --}}
+                <div class="px-6 py-4 border-b">
+                    <h3 class="font-bold text-lg text-gray-800">Konfirmasi Pembayaran</h3>
+                </div>
+                <div class="px-6 py-5 space-y-4">
+
+                    {{-- Total --}}
+                    <div class="flex justify-between items-center bg-blue-50 rounded-xl px-4 py-3">
+                        <span class="text-sm text-gray-600">Total Belanja</span>
+                        <span class="font-bold text-xl text-blue-600" x-text="'Rp ' + total.toLocaleString('id-ID')"></span>
+                    </div>
+
+                    {{-- Input nominal --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nominal Bayar</label>
+                        <input type="number" x-model="amountPaid"
+                            class="w-full border border-gray-300 rounded-xl px-4 py-3 text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="0">
+                    </div>
+
+                    {{-- Kembalian --}}
+                    <div class="flex justify-between items-center bg-green-50 rounded-xl px-4 py-3">
+                        <span class="text-sm text-gray-600">Kembalian</span>
+                        <span class="font-bold text-xl text-green-600"
+                            x-text="'Rp ' + change.toLocaleString('id-ID')"></span>
+                    </div>
+
+                </div>
+
+                {{-- FOOTER --}}
+                <div class="px-6 py-4 border-t flex gap-3">
+                    <button @click="showModal = false"
+                        class="flex-1 py-3 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 transition font-medium text-sm">
+                        Batal
+                    </button>
+                    <button @click="bayar()" :disabled="amountPaid < total"
+                        :class="amountPaid < total ?
+                            'bg-gray-200 text-gray-400 cursor-not-allowed' :
+                            'bg-blue-600 text-white hover:bg-blue-700'"
+                        class="flex-1 py-3 rounded-xl font-semibold text-sm transition">
+                        Konfirmasi Bayar
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 
-@endsection
+    @endsection
