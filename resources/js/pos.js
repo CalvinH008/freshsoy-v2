@@ -78,6 +78,8 @@ export function posSystem(outletId = null) {
 
         showModal: false,
         amountPaid: 0,
+        showReceipt: false,
+        receipt: null,
 
         get change() {
             return this.amountPaid >= this.total
@@ -93,6 +95,8 @@ export function posSystem(outletId = null) {
                     cart: this.cart
                 })
                 if(result){
+                    this.receipt = result.data
+                    this.showReceipt = true
                     this.cart = []
                     this.amountPaid = 0
                     this.showModal = false

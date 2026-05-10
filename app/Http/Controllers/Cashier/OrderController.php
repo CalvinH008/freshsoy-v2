@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductStock;
+use App\Models\ProductVariant;
 use App\Models\StockMovement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,21 +16,45 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'outlet_id' => ['required', 'exists:outlets,id'],
             'amount_paid' => ['required', 'numeric'],
             'cart' => ['required', 'array'],
             'cart.*.variantId' => ['required', 'exists:product_variants,id'],
-            'cart.*.price' => ['required', 'numeric'],
             'cart.*.quantity' => ['required', 'integer', 'min:1']
         ]);
 
         $outletId = auth()->user()->outlet_id;
-        $total = collect($request->cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+
+        $variantIds = collect($request->cart)->pluck('variantId');
+        $variants = ProductVariant::whereIn('id', $variantIds)->get()->keyBy('id');
+        $stocks = ProductStock::whereIn('product_variant_id', $variantIds)
+            ->where('outlet_id', $outletId)
+            ->get()
+            ->keyBy('product_variant_id');
+
+        $total = collect($request->cart)->sum(
+            fn($item) =>
+            $variants[$item['variantId']]->price * $item['quantity']
+        );
+
+        foreach ($request->cart as $item) {
+            $stock = $stocks[$item['variantId']]?->stock ?? 0;
+            if ($stock < $item['quantity']) {
+                return response()->json([
+                    'error' => 'Stok tidak cukup untuk variant ' . $item['variantId']
+                ], 422);
+            }
+        }
+
+        $order = null;
+
+        if ($request->amount_paid < $total) {
+            return response()->json(['error' => 'Nominal bayar kurang'], 422);
+        }
 
         try {
-            DB::transaction(function () use ($request, $total, $outletId) {
+            DB::transaction(function () use ($request, $total, $outletId, &$order, $variants, $stocks) {
                 $order = Order::create([
-                    'outlet_id' => $request->outlet_id,
+                    'outlet_id' => $outletId,
                     'user_id' => auth()->id(),
                     'total_price' => $total,
                     'amount_paid' => $request->amount_paid,
@@ -38,23 +63,23 @@ class OrderController extends Controller
                 ]);
 
                 foreach ($request->cart as $item) {
+                    $variant = $variants[$item['variantId']];
+                    $price = $variant->price;
+                    $subtotal = $price * $item['quantity'];
+                    $stockBefore = $stocks[$item['variantId']]?-> stock ?? 0;
+                    $stockAfter = $stockBefore - $item['quantity'];
+
                     OrderItem::create([
                         'order_id' => $order->id,
                         'product_variant_id' => $item['variantId'],
                         'quantity' => $item['quantity'],
-                        'price' => $item['price'],
-                        'subtotal' => $item['price'] * $item['quantity']
+                        'price' => $price,
+                        'subtotal' => $subtotal
                     ]);
-
-                    $stockBefore = ProductStock::where('product_variant_id', $item['variantId'])
-                        ->where('outlet_id', $outletId)
-                        ->first()?->stock ?? 0;
 
                     ProductStock::where('product_variant_id', $item['variantId'])
                         ->where('outlet_id', $outletId)
                         ->decrement('stock', $item['quantity']);
-
-                    $stockAfter = $stockBefore - $item['quantity'];
 
                     StockMovement::create([
                         'product_variant_id' => $item['variantId'],
@@ -71,12 +96,15 @@ class OrderController extends Controller
             });
 
             return response()->json([
-                'message' => 'Order berhasil'
-            ]);
+                'message' => 'Order berhasil',
+                'order' => $order->load('items.variant.product'),
+                'outlet' => $order->outlet,
+                'cashier' => auth()->user()->name
+            ], 201);
         } catch (\Exception $error) {
             return response()->json([
                 'error' => $error->getMessage()
-            ]);
+            ], 500);
         }
     }
 }
