@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export function productForm(initialVariants = []) {
     return {
         variants: initialVariants,
@@ -22,7 +24,7 @@ export function posSystem(outletId = null) {
         outletId: outletId,
 
         init() {
-            console.log('outlet_id', this.outletId)
+            console.log("outlet_id", this.outletId);
             this.getProduct();
         },
 
@@ -74,11 +76,30 @@ export function posSystem(outletId = null) {
             );
         },
 
-        get change(){
-            return this.amountPaid >= this.total ? this.amountPaid - this.total : 0
-        },
-
         showModal: false,
         amountPaid: 0,
+
+        get change() {
+            return this.amountPaid >= this.total
+                ? this.amountPaid - this.total
+                : 0;
+        },
+
+        async bayar(){
+            try{
+                const result = await axios.post('/cashier/order', {
+                    outlet_id: this.outletId,
+                    amount_paid: this.amountPaid,
+                    cart: this.cart
+                })
+                if(result){
+                    this.cart = []
+                    this.amountPaid = 0
+                    this.showModal = false
+                }
+            }catch(error){
+                console.log('error' + error)
+            }
+        },
     };
 }

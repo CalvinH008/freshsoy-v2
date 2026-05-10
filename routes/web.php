@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Manager\DashboardController as ManagerDashboard;
 use App\Http\Controllers\Cashier\DashboardController as CashierDashboard;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Cashier\OrderController;
 use App\Http\Controllers\Inventory\DashboardController as InventoryDashboard;
 use App\Http\Controllers\Inventory\StockController as InventoryStockController;
 use App\Http\Controllers\Inventory\StockMovementController as InventoryStockMovementController;
@@ -69,4 +70,5 @@ Route::prefix('inventory')->name('inventory.')->group(function () {
 // Cashier Routes
 Route::prefix('cashier')->name('cashier.')->middleware(['auth', 'role:cashier'])->group(function () {
     Route::get('/pos', [CashierDashboard::class, 'index'])->name('pos');
+    Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 });
