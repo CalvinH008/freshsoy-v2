@@ -163,4 +163,122 @@
             </div>
         </div>
 
-    @endsection
+        {{-- MODAL STRUK --}}
+        <div x-show="showReceipt"
+            class="fixed inset-0 bg-black/50 flex justify-center items-start pt-10 z-50 overflow-y-auto">
+
+            <div id="receipt" class="bg-white w-[340px] rounded-md shadow-2xl border border-gray-200 text-sm font-mono">
+
+                {{-- HEADER --}}
+                <div class="text-center px-4 pt-5">
+                    <h2 class="font-bold text-base uppercase tracking-wide" x-text="receipt?.outlet?.name">
+                    </h2>
+
+                    <p class="text-xs mt-1 text-gray-600">
+                        POS Receipt
+                    </p>
+
+                    <p class="text-[11px] text-gray-500 mt-1"
+                        x-text="new Date(receipt?.order?.created_at).toLocaleString('id-ID')">
+                    </p>
+                </div>
+
+                {{-- GARIS --}}
+                <div class="border-t border-dashed border-gray-400 my-4"></div>
+
+                {{-- ITEMS --}}
+                <div class="px-4 space-y-3">
+
+                    <template x-for="item in receipt?.order?.items" :key="item.id">
+
+                        <div>
+
+                            {{-- NAMA --}}
+                            <div class="flex justify-between gap-3">
+
+                                <p class="break-words" x-text="item.variant?.product?.name">
+                                </p>
+
+                                <p class="shrink-0" x-text="'Rp ' + item.subtotal.toLocaleString('id-ID')">
+                                </p>
+
+                            </div>
+
+                            {{-- DETAIL --}}
+                            <div class="flex justify-between text-xs text-gray-500 mt-1">
+
+                                <p x-text="'Size ' + item.variant?.size"></p>
+
+                                <p x-text="item.quantity + ' x Rp ' + item.price.toLocaleString('id-ID')"></p>
+
+                            </div>
+
+                        </div>
+
+                    </template>
+
+                </div>
+
+                {{-- GARIS --}}
+                <div class="border-t border-dashed border-gray-400 my-4"></div>
+
+                {{-- TOTAL --}}
+                <div class="px-4 space-y-2">
+
+                    <div class="flex justify-between">
+                        <span>Total</span>
+
+                        <span class="font-bold" x-text="'Rp ' + receipt?.order?.total_price?.toLocaleString('id-ID')">
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span>Bayar</span>
+
+                        <span x-text="'Rp ' + receipt?.order?.amount_paid?.toLocaleString('id-ID')">
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between font-bold text-base">
+                        <span>Kembali</span>
+
+                        <span x-text="'Rp ' + receipt?.order?.change?.toLocaleString('id-ID')">
+                        </span>
+                    </div>
+
+                </div>
+
+                {{-- GARIS --}}
+                <div class="border-t border-dashed border-gray-400 my-4"></div>
+
+                {{-- FOOTER --}}
+                <div class="px-4 pb-5 text-center">
+
+                    <p class="text-xs text-gray-600" x-text="'Kasir: ' + receipt?.cashier">
+                    </p>
+
+                    <p class="text-xs text-gray-500 mt-2">
+                        Terima kasih sudah berbelanja
+                    </p>
+
+                    {{-- BUTTON --}}
+                    <div class="flex gap-2 mt-5 no-print">
+
+                        <button @click="window.print()"
+                            class="flex-1 py-2 bg-black text-white rounded text-sm hover:bg-gray-800 transition">
+                            Cetak
+                        </button>
+
+                        <button @click="showReceipt = false"
+                            class="flex-1 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50 transition">
+                            Tutup
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+@endsection
