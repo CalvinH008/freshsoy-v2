@@ -10,6 +10,7 @@ use App\Models\ProductVariant;
 use App\Models\StockMovement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -106,5 +107,11 @@ class OrderController extends Controller
                 'error' => $error->getMessage()
             ], 500);
         }
+    }
+
+    public function receipt(Order $order){
+        $order->load(['items.variant.product', 'outlet', 'user']);
+        $pdf = Pdf::loadView('cashier.pos.receipt', compact('order'));
+        return $pdf->download("receipt-{$order->id}.pdf");
     }
 }

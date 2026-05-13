@@ -71,4 +71,5 @@ Route::prefix('inventory')->name('inventory.')->group(function () {
 Route::prefix('cashier')->name('cashier.')->middleware(['auth', 'role:cashier'])->group(function () {
     Route::get('/pos', [CashierDashboard::class, 'index'])->name('pos');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+    Route::get('order/{order}/receipt', [OrderController::class, 'receipt'])->name('order.receipt');
 });

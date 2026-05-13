@@ -264,7 +264,7 @@
                     {{-- BUTTON --}}
                     <div class="flex gap-2 mt-5 no-print">
 
-                        <button @click="window.print()"
+                        <button @click="window.open(`/cashier/order/${receipt.order.id}/receipt`)"
                             class="flex-1 py-2 bg-black text-white rounded text-sm hover:bg-gray-800 transition">
                             Cetak
                         </button>
