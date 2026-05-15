@@ -6,8 +6,6 @@
         Management</a>
     <a href=" {{ route('admin.products.index') }} " class="block px-4 py-3 hover:bg-gray-700 transition">Product
         Management</a>
-    <a href=" {{ route('admin.stocks.index') }} " class="block px-4 py-3 hover:bg-gray-700 transition">Stock
-        Management</a>
     <a href=" {{ route('admin.stock-movements.index') }} " class="block px-4 py-3 hover:bg-gray-700 transition">Stock
         History</a>
 @endhasrole

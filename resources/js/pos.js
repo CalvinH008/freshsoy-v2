@@ -89,7 +89,7 @@ export function posSystem(outletId = null) {
 
         async bayar(){
             try{
-                const result = await axios.post('/cashier/order', {
+                const result = await axios.post('/cashier/orders', {
                     outlet_id: this.outletId,
                     amount_paid: this.amountPaid,
                     cart: this.cart

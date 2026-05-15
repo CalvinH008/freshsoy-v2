@@ -11,6 +11,8 @@ use App\Models\StockMovement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class OrderController extends Controller
 {
@@ -113,5 +115,16 @@ class OrderController extends Controller
         $order->load(['items.variant.product', 'outlet', 'user']);
         $pdf = Pdf::loadView('cashier.pos.receipt', compact('order'));
         return $pdf->download("receipt-{$order->id}.pdf");
+    }
+
+    public function history(): View{
+        $orders = Order::query()
+            ->where('user_id', Auth::id())
+            ->whereDate('created_at', today())
+            ->with(['items.variant.product', 'outlet', 'user'])
+            ->latest()
+            ->paginate(10);
+
+        return view('cashier.orders.index', compact('orders'));
     }
 }

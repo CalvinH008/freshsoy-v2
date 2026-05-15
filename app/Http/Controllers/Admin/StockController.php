@@ -62,6 +62,6 @@ class StockController extends Controller
                 }
             }
         });
-        return redirect()->route('admin.products.index')->with('success', 'Stock Successfully');
+        return redirect()->route('admin.products.index')->with('success', 'Stock Updated Successfully');
     }
 }
