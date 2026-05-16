@@ -144,11 +144,16 @@
                             x-text="'Rp ' + change.toLocaleString('id-ID')"></span>
                     </div>
 
+                    {{-- Error message --}}
+                    <div x-show="errorMessage" class="bg-red-50 text-red-500 text-sm rounded-xl px-4 py-3">
+                        <span x-text="errorMessage"></span>
+                    </div>
+
                 </div>
 
                 {{-- FOOTER --}}
                 <div class="px-6 py-4 border-t flex gap-3">
-                    <button @click="showModal = false"
+                    <button @click="showModal = false; errorMessage=''"
                         class="flex-1 py-3 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-50 transition font-medium text-sm">
                         Batal
                     </button>

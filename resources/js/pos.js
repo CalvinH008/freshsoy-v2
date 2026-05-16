@@ -22,6 +22,7 @@ export function posSystem(outletId = null) {
         cart: [],
         search: "",
         outletId: outletId,
+        errorMessage: '',
 
         init() {
             console.log("outlet_id", this.outletId);
@@ -100,9 +101,12 @@ export function posSystem(outletId = null) {
                     this.cart = []
                     this.amountPaid = 0
                     this.showModal = false
+                    this.errorMessage = ''
                 }
             }catch(error){
-                console.log('error' + error)
+                if(error.response){
+                    this.errorMessage = error.response.data.error
+                }
             }
         },
     };
