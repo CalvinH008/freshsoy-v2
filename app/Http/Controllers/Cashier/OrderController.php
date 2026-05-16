@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Cashier;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Payment;
 use App\Models\ProductStock;
 use App\Models\ProductVariant;
 use App\Models\StockMovement;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -22,7 +24,8 @@ class OrderController extends Controller
             'amount_paid' => ['required', 'numeric'],
             'cart' => ['required', 'array'],
             'cart.*.variantId' => ['required', 'exists:product_variants,id'],
-            'cart.*.quantity' => ['required', 'integer', 'min:1']
+            'cart.*.quantity' => ['required', 'integer', 'min:1'],
+            'payment_method' => ['required', Rule::in(['cash', 'qris', 'transfer'])]
         ]);
 
         $outletId = auth()->user()->outlet_id;
@@ -69,7 +72,7 @@ class OrderController extends Controller
                     $variant = $variants[$item['variantId']];
                     $price = $variant->price;
                     $subtotal = $price * $item['quantity'];
-                    $stockBefore = $stocks[$item['variantId']]?-> stock ?? 0;
+                    $stockBefore = $stocks[$item['variantId']]?->stock ?? 0;
                     $stockAfter = $stockBefore - $item['quantity'];
 
                     OrderItem::create([
@@ -96,6 +99,14 @@ class OrderController extends Controller
                         'note' => 'Tugas kasir'
                     ]);
                 }
+
+                Payment::create([
+                    'order_id' => $order->id,
+                    'payment_method' => $request->payment_method,
+                    'amount' => $total,
+                    'status' => 'paid',
+                    'paid_at' => now()
+                ]);
             });
 
             return response()->json([
@@ -111,13 +122,15 @@ class OrderController extends Controller
         }
     }
 
-    public function receipt(Order $order){
+    public function receipt(Order $order)
+    {
         $order->load(['items.variant.product', 'outlet', 'user']);
         $pdf = Pdf::loadView('cashier.pos.receipt', compact('order'));
         return $pdf->download("receipt-{$order->id}.pdf");
     }
 
-    public function history(): View{
+    public function history(): View
+    {
         $orders = Order::query()
             ->where('user_id', Auth::id())
             ->whereDate('created_at', today())

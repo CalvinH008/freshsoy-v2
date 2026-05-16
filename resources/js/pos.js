@@ -22,7 +22,8 @@ export function posSystem(outletId = null) {
         cart: [],
         search: "",
         outletId: outletId,
-        errorMessage: '',
+        errorMessage: "",
+        paymentMethod: "cash",
 
         init() {
             console.log("outlet_id", this.outletId);
@@ -88,24 +89,25 @@ export function posSystem(outletId = null) {
                 : 0;
         },
 
-        async bayar(){
-            try{
-                const result = await axios.post('/cashier/orders', {
+        async bayar() {
+            try {
+                const result = await axios.post("/cashier/orders", {
                     outlet_id: this.outletId,
                     amount_paid: this.amountPaid,
-                    cart: this.cart
-                })
-                if(result){
-                    this.receipt = result.data
-                    this.showReceipt = true
-                    this.cart = []
-                    this.amountPaid = 0
-                    this.showModal = false
-                    this.errorMessage = ''
+                    cart: this.cart,
+                    payment_method: this.paymentMethod,
+                });
+                if (result) {
+                    this.receipt = result.data;
+                    this.showReceipt = true;
+                    this.cart = [];
+                    this.amountPaid = 0;
+                    this.showModal = false;
+                    this.errorMessage = "";
                 }
-            }catch(error){
-                if(error.response){
-                    this.errorMessage = error.response.data.error
+            } catch (error) {
+                if (error.response) {
+                    this.errorMessage = error.response.data.error;
                 }
             }
         },

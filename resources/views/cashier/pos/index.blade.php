@@ -137,6 +137,33 @@
                             placeholder="0">
                     </div>
 
+                    {{-- Metode Pembayaran --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Metode Pembayaran
+                        </label>
+                        <div class="flex gap-2">
+                            <button type="button" @click="paymentMethod = 'cash'"
+                                :class="paymentMethod === 'cash' ? 'bg-blue-600 text-white' :
+                                    'bg-white text-gray-600 border border-gray-300'"
+                                class="flex-1 py-2 rounded-xl text-sm font-medium transition">
+                                Cash
+                            </button>
+                            <button type="button" @click="paymentMethod = 'qris'"
+                                :class="paymentMethod === 'qris' ? 'bg-blue-600 text-white' :
+                                    'bg-white text-gray-600 border border-gray-300'"
+                                class="flex-1 py-2 rounded-xl text-sm font-medium transition">
+                                QRIS
+                            </button>
+                            <button type="button" @click="paymentMethod = 'transfer'"
+                                :class="paymentMethod === 'transfer' ? 'bg-blue-600 text-white' :
+                                    'bg-white text-gray-600 border border-gray-300'"
+                                class="flex-1 py-2 rounded-xl text-sm font-medium transition">
+                                Transfer
+                            </button>
+                        </div>
+                    </div>
+
                     {{-- Kembalian --}}
                     <div class="flex justify-between items-center bg-green-50 rounded-xl px-4 py-3">
                         <span class="text-sm text-gray-600">Kembalian</span>
