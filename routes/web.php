@@ -36,7 +36,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle');
     // crud outlet
     Route::resource('/outlets', OutletController::class)->except(['show']);
-    Route::patch('outlets/{outlet}/toggle', [OutletController::class, 'toggleStatus'])->name('outlets.toggle');
+    Route::patch('/outlets/{outlet}/toggle', [OutletController::class, 'toggleStatus'])->name('outlets.toggle');
     // crud category
     Route::resource('/categories', CategoryController::class)->except(['show']);
     Route::patch('/categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus'])->name('categories.toggle');
@@ -46,7 +46,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     // stock management
     Route::get('/stocks', [StockController::class, 'index'])->name('stocks.index');
     Route::put('/stocks', [StockController::class, 'update'])->name('stocks.update');
-    Route::get('stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
+    Route::get('/stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
 });
 
 // Manager Routes
@@ -58,13 +58,13 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])
 });
 
 // Inventory Routes
-Route::prefix('inventory')->name('inventory.')->group(function () {
+Route::prefix('inventory')->name('inventory.')->middleware(['auth', 'role:inventory'])->group(function () {
     // dashboard inventory
     Route::get('/dashboard', [InventoryDashboard::class, 'index'])->name('dashboard');
     // stock management
     Route::get('/stocks', [InventoryStockController::class, 'index'])->name('stocks.index');
     Route::put('/stocks/update', [InventoryStockController::class, 'update'])->name('stocks.update');
-    Route::get('stock-movements', [InventoryStockMovementController::class, 'index'])->name('stock-movements.index');
+    Route::get('/stock-movements', [InventoryStockMovementController::class, 'index'])->name('stock-movements.index');
 });
 
 // Cashier Routes

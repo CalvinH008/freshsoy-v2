@@ -7,7 +7,7 @@
     </div>
 
     {{-- report card --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <x-card>
             <p class="text-sm text-gray-500">Total Products</p>
             <h2 class="text-3xl font-bold mt-2">{{ $totalProducts }}</h2>
@@ -20,9 +20,18 @@
             <p class="text-sm text-gray-500">Total Cashier</p>
             <h2 class="text-3xl font-bold mt-2">{{ $totalCashiers }}</h2>
         </x-card>
+        <x-card>
+            <p class="text-sm text-gray-500">Total Transaction</p>
+            <h2 class="text-3xl font-bold mt-2">{{ $count }}</h2>
+        </x-card>
+        <x-card>
+            <p class="text-sm text-gray-500">Total Revenue</p>
+            <h2 class="text-3xl font-bold mt-2">Rp. {{ number_format($total, 0, ',', '.') }}</h2>
+        </x-card>
     </div>
 
     {{-- low stock alert --}}
+    <h3 class="font-semibold text-gray-700 mb-3">⚠️ Low Stock Alert</h3>
     <div class="mt-5">
         <x-card>
             <table class="w-full text-sm mt-6">
@@ -40,7 +49,7 @@
                 <tbody>
                     @forelse ($lowStocks as $stock)
                         <tr>
-                            <td class="p-3 border-t border-gray-100"> {{ $loop->iteration}} </td>
+                            <td class="p-3 border-t border-gray-100"> {{ $loop->iteration }} </td>
                             <td class="p-3 border-t border-gray-100"> {{ $stock->variant->product->name }} </td>
                             <td>
                                 @if ($stock->variant->product->image)
@@ -68,6 +77,46 @@
                         <tr>
                             <td colspan="7" class="p-4 text-center text-gray-500">
                                 Semua stok aman
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </x-card>
+    </div>
+
+
+    <h3 class="font-semibold text-gray-700 mb-3">📋 Transaksi Hari Ini</h3>
+    <div class="mt-5">
+        <x-card>
+            <table class="w-full text-sm mt-6">
+                <thead>
+                    <tr>
+                        <th class="text-left p-3 text-gray-500 font-medium">#</th>
+                        <th class="text-left p-3 text-gray-500 font-medium">No Order</th>
+                        <th class="text-left p-3 text-gray-500 font-medium">Cashier</th>
+                        <th class="text-left p-3 text-gray-500 font-medium">Total Item</th>
+                        <th class="text-left p-3 text-gray-500 font-medium">Total Price</th>
+                        <th class="text-left p-3 text-gray-500 font-medium">Payment Method</th>
+                        <th class="text-left p-3 text-gray-500 font-medium">Paid At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($orders as $order)
+                        <tr>
+                            <td class="p-3 border-t border-gray-100"> {{ $loop->iteration }} </td>
+                            <td class="p-3 border-t border-gray-100"> {{ $order->id }} </td>
+                            <td class="p-3 border-gray-100 border-t"> {{ $order->user->name }} </td>
+                            <td class="p-3 border-t border-gray-100"> {{ $order->items->sum('quantity') }} </td>
+                            <td class="p-3 border-t border-gray-100"> Rp.
+                                {{ number_format($order->total_price, 0, ',', '.') }} </td>
+                            <td class="p-3 border-t border-gray-100"> {{ $order->payment->payment_method ?? '-' }} </td>
+                            <td class="p-3 border-t border-gray-100"> {{ $order->created_at->format('H:i') }} </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="p-4 text-center text-gray-500">
+                                Tidak ada transaksi hari ini
                             </td>
                         </tr>
                     @endforelse
