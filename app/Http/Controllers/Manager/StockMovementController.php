@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Inventory;
+namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
-use App\Models\Outlet;
 use App\Models\StockMovement;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -20,6 +18,6 @@ class StockMovementController extends Controller
                 $q->whereHas('variant.product', fn($r) => $r->where('name', "LIKE", "%$v%"));
             })
             ->paginate(12);
-        return view('inventory.stock_movements.index', compact('movements'));
+        return view('manager.stock_movements.index', compact('movements'));
     }
 }

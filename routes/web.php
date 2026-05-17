@@ -14,8 +14,10 @@ use App\Http\Controllers\Cashier\OrderController;
 use App\Http\Controllers\Inventory\DashboardController as InventoryDashboard;
 use App\Http\Controllers\Inventory\StockController as InventoryStockController;
 use App\Http\Controllers\Inventory\StockMovementController as InventoryStockMovementController;
+use App\Http\Controllers\Manager\CategoryController as ManagerCategoryController;
 use App\Http\Controllers\Manager\ProductController as ManagerProductController;
 use App\Http\Controllers\Manager\ReportController;
+use App\Http\Controllers\Manager\StockMovementController as ManagerStockMovementController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -54,9 +56,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])->group(function () {
     // dashboard manager
     Route::get('/dashboard', [ManagerDashboard::class, 'index'])->name('dashboard');
-    // view produk manager
+    // view category 
+    Route::get('/categories', [ManagerCategoryController::class, 'index'])->name('categories.index');
+    // view produk 
     Route::get('/products', [ManagerProductController::class, 'index'])->name('products.index');
+    // sales report
     Route::get('/reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
+    // view stock movement
+    Route::get('/stock-movements', [ManagerStockMovementController::class, 'index'])->name('stock-movements.index');
 });
 
 // Inventory Routes

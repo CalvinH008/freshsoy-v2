@@ -18,12 +18,6 @@
 
     {{-- Main Area --}}
     <div class="flex-1 flex flex-col overflow-hidden">
-
-        {{-- Navbar --}}
-        <header class="bg-white shadow px-6 py-4">
-            @include('partials.navbar')
-        </header>
-
         {{-- Content --}}
         <main class="flex-1 overflow-y-auto p-6">
             @if (session('success'))
