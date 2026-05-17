@@ -15,6 +15,7 @@ use App\Http\Controllers\Inventory\DashboardController as InventoryDashboard;
 use App\Http\Controllers\Inventory\StockController as InventoryStockController;
 use App\Http\Controllers\Inventory\StockMovementController as InventoryStockMovementController;
 use App\Http\Controllers\Manager\ProductController as ManagerProductController;
+use App\Http\Controllers\Manager\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -55,6 +56,7 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:manager'])
     Route::get('/dashboard', [ManagerDashboard::class, 'index'])->name('dashboard');
     // view produk manager
     Route::get('/products', [ManagerProductController::class, 'index'])->name('products.index');
+    Route::get('/reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
 });
 
 // Inventory Routes

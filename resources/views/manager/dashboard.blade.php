@@ -31,9 +31,9 @@
     </div>
 
     {{-- low stock alert --}}
-    <h3 class="font-semibold text-gray-700 mb-3">⚠️ Low Stock Alert</h3>
     <div class="mt-5">
         <x-card>
+            <h3 class="font-semibold text-gray-700 mb-3">⚠️ Low Stock Alert</h3>
             <table class="w-full text-sm mt-6">
                 <thead>
                     <tr>

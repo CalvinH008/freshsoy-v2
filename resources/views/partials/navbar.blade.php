@@ -1,6 +1,5 @@
 <nav class="flex items-center justify-between">
     <span></span>
-
     <div class="flex items-center gap-4">
         @auth
             <p> {{ auth()->user()->name }} </p>
